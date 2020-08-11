@@ -1,8 +1,8 @@
-# Demo: integrating Jenkins with Grype
+# Demo: Integrating Jenkins with Grype
 
 This is a very rough demo of integrating Grype with jenkins.  If you don't know what Grype is, read up here: https://github.com/anchore/grype
 
-## Part 1: Jenkins setup
+## Part 1: Jenkins Setup
 
 We're going to run jenkins in a container to make this fairly self-contained and easily disposable.  This command will run jenkins and bind to the host's docker sock (if you don't know what that means, don't worry about it, it's not important).
 
