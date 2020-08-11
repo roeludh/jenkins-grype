@@ -3,7 +3,6 @@ pipeline {
     registry = 'registry.hub.docker.com'
     registryCredential = 'docker-hub'
     repository = 'pvnovarese/jenkins-grype-demo'
-    imageLine = 'pvnovarese/jenkins-grype-demo:latest'
   }
   agent any
   stages {
@@ -12,21 +11,20 @@ pipeline {
         checkout scm
       }
     }
-    stage('Build image and push to registry') {
+    stage('Build image and tag as latest') {
       steps {
         sh 'docker --version'
         script {
           docker.withRegistry('https://' + registry, registryCredential) {
             def image = docker.build(repository)
-            image.push()
           }
         }
       }
     }
     stage('Analyze with grype') {
       steps {
-        // need to actually test this out once I get linux binaries
-        sh '/usr/local/bin/grype -o json ${repository}:latest | grep -E 'Critical|High' || exit 0'
+        // run grype, if we find High or Critical vulnerabilities, fail and kill the pipeline
+        sh '/var/jenkins_home/grype ${repository}:latest | tr "\n" " " | grep -qv High'
       }
     }
     stage('Build and push prod image to registry') {
