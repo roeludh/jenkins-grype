@@ -1,6 +1,6 @@
 # Demo: Integrating Jenkins with Grype
 
-This is a very rough demo of integrating Grype with jenkins.  If you don't know what Grype is, read up here: https://github.com/anchore/grype
+This is a very rough demo of integrating Grype with Jenkins.  If you don't know what Grype is, read up here: https://github.com/anchore/grype
 
 ## Part 1: Jenkins Setup
 
