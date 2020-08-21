@@ -25,7 +25,7 @@ pipeline {
       steps {
         // run grype with json output, use jq just to get severities, concatenate all onto one line,
         // if we find High or Critical vulnerabilities, fail and kill the pipeline
-        sh '/var/jenkins_home/grype -o json ${repository}:latest | jq .[].vulnerability.severity | tr "\n" " " | grep -qvE "Critical"'
+        sh '/var/jenkins_home/grype -o json ${repository}:latest | jq .[].vulnerability.severity | tr "\n" " " | grep -qvE "Critical|High"'
       }
     }
     stage('Build and push prod image to registry') {
