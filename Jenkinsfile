@@ -39,6 +39,10 @@ pipeline {
         // set -o pipefail enables the entire command to return the failure 
         // in grype and still get the count of vulnerability types
         // 
+        // you can change this from "high" to "critical" if you want to see 
+        // the command succeed since dvwa doesn't (as of today) have any 
+        // critical vulns in it, just a bunch of highs
+        //
         sh 'set -o pipefail ; /var/jenkins_home/grype -f high -q -o json ${repository}:latest | jq .matches[].vulnerability.severity | sort | uniq -c'
       }
     }
