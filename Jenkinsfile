@@ -39,7 +39,7 @@ pipeline {
         // set -o pipefail enables the entire command to return the failure 
         // in grype and still get the count of vulnerability types
         // 
-        sh 'set -o pipefail ; /var/jenkins_home/grype -f high -q -o json ${repository}:latest | jq .matches[].vulnerability.severity | sort | uniq -c'
+        sh 'set -o pipefail ; /var/jenkins_home/grype -f critical -q -o json ${repository}:latest | jq .matches[].vulnerability.severity | sort | uniq -c'
       }
     }
     stage('Re-tag as prod and push stable image to registry') {
