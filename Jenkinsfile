@@ -52,7 +52,20 @@ pipeline {
         // the command succeed since dvwa doesn't (as of today) have any 
         // critical vulns in it, just a bunch of highs
         //
-        sh 'set -o pipefail ; /var/jenkins_home/grype -f high -q -o json ${REPOSITORY}:${BUILD_NUMBER} | jq .matches[].vulnerability.severity | sort | uniq -c'
+        script {
+          try {
+            // -f high --> fail if "high" or "critical" vulns detected
+            // we don't really need to pipe into jq if we're just testing
+            // for vulns, but this way we can get some output to provide
+            // to devs as feedback.
+            //
+            sh 'set -o pipefail ; /var/jenkins_home/grype -f high -q -o json ${REPOSITORY}:${BUILD_NUMBER} | jq .matches[].vulnerability.severity | sort | uniq -c'
+          } catch (err) {
+            // if scan fails, clean up (delete the image) and fail the build
+            sh 'docker rmi ${REPOSITORY}:${BUILD_NUMBER}'
+            sh 'exit 1'
+          } // end try/catch
+        } // end script
       } // end steps
     } // end stage "analyze with grype"
     
