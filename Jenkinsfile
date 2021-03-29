@@ -49,8 +49,8 @@ pipeline {
         // in grype and still get the count of vulnerability types
         // 
         // you can change this from "high" to "critical" if you want to see 
-        // the command succeed since dvwa doesn't (as of today) have any 
-        // critical vulns in it, just a bunch of highs
+        // the command succeed since pvnovarese/ubuntu_sudo_test doesn't (as 
+        // of today) have any critical vulns in it, just high.
         //
         script {
           try {
@@ -59,7 +59,7 @@ pipeline {
             // for vulns, but this way we can get some output to provide
             // to devs as feedback.
             //
-            sh 'set -o pipefail ; /var/jenkins_home/grype -f high -q -o json ${REPOSITORY}:${BUILD_NUMBER} | jq .matches[].vulnerability.severity | sort | uniq -c'
+            sh 'set -o pipefail ; /var/jenkins_home/grype -f critical -q -o json ${REPOSITORY}:${BUILD_NUMBER} | jq .matches[].vulnerability.severity | sort | uniq -c'
           } catch (err) {
             // if scan fails, clean up (delete the image) and fail the build
             sh """
