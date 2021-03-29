@@ -62,8 +62,11 @@ pipeline {
             sh 'set -o pipefail ; /var/jenkins_home/grype -f high -q -o json ${REPOSITORY}:${BUILD_NUMBER} | jq .matches[].vulnerability.severity | sort | uniq -c'
           } catch (err) {
             // if scan fails, clean up (delete the image) and fail the build
-            sh 'docker rmi ${REPOSITORY}:${BUILD_NUMBER}'
-            sh 'exit 1'
+            sh """
+              echo "Vulnerabilities detected in ${REPOSITORY}:${BUILD_NUMBER}, cleaning up and failing build."
+              docker rmi ${REPOSITORY}:${BUILD_NUMBER}
+              exit 1
+            """
           } // end try/catch
         } // end script
       } // end steps
@@ -71,19 +74,17 @@ pipeline {
     
     stage('Re-tag as prod and push stable image to registry') {
       steps {
-        script {
-          docker.withRegistry('', HUB_CREDENTIAL) {
-            dockerImage.push('prod') 
-            // dockerImage.push takes the argument as a new tag for the image before pushing
-          }
-        } // end script
+        sh """
+          docker tag ${REPOSITORY}:${BUILD_NUMBER} ${REPOSITORY}:prod
+          docker push ${REPOSITORY}:prod
+        """
       } // end steps
     } // end stage "retag as prod"
 
     stage('Clean up') {
       // delete the images locally
       steps {
-        sh 'docker rmi ${REPOSITORY}${TAG} ${REPOSITORY}:prod'
+        sh 'docker rmi ${REPOSITORY}:${BUILD_NUMBER} ${REPOSITORY}:prod'
       } // end steps
     } // end stage "clean up"
 
