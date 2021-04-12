@@ -59,7 +59,10 @@ pipeline {
             // for vulns, but this way we can get some output to provide
             // to devs as feedback.
             //
-            sh 'set -o pipefail ; /var/jenkins_home/grype -f high -q -o json ${REPOSITORY}:${BUILD_NUMBER} | jq .matches[].vulnerability.severity | sort | uniq -c'
+            // older version:
+            //             sh 'set -o pipefail ; /var/jenkins_home/grype -f high -q -o json ${REPOSITORY}:${BUILD_NUMBER} | jq .matches[].vulnerability.severity | sort | uniq -c'
+            //
+            sh 'set -o pipefail ; /var/jenkins_home/grype -f high -q ${REPOSITORY}:${BUILD_NUMBER}'
           } catch (err) {
             // if scan fails, clean up (delete the image) and fail the build
             sh """
