@@ -1,5 +1,13 @@
 # Demo: Integrating Jenkins with Grype
 
+## NOTE: deprecated
+
+this is an old demo, I'm leaving it here for a while but I'm going to delete it eventually.
+
+there is a new, better demo here: https://github.com/pvnovarese/syft-demo
+
+
+
 This is a very rough demo of integrating Grype with Jenkins.  If you don't know what Grype is, read up here: https://github.com/anchore/grype
 
 ## Part 1: Jenkins Setup
