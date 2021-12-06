@@ -4,7 +4,7 @@
 
 this is an old demo, I'm leaving it here for a while but I'm going to delete it eventually.
 
-there is a new, better demo here: https://github.com/pvnovarese/syft-demo
+there is a new, better demo here: https://github.com/pvnovarese/grype-demo
 
 
 
